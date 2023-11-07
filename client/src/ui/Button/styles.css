@@ -1,0 +1,39 @@
+.button {
+  color: black;
+  padding: 10px 20px;
+  border: 2px solid lightgrey;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  display: inline-block;
+  background-color: white;
+  font-size: 16px;
+  position: relative;
+}
+
+.button:hover {
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0);
+  border-color: black;
+}
+
+.button:active {
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0);
+  border-color: black;
+}
+
+.button:disabled {
+  cursor: default;
+  background-color: rgb(238, 238, 238);
+}
+
+.button .circle-loader {
+  position: absolute;
+  left: calc(50% - 10px);
+  top: calc(50% - 10px);
+  height: 19px;
+  width: 19px;
+  border-width: 3px;
+}

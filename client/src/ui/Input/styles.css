@@ -1,0 +1,18 @@
+.input {
+  outline: none;
+  width: 100%;
+  background-color: #fff;
+  color: #000;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.input-container span {
+  color: red;
+  font-size: 12px;
+}
+
+.input-container.error .input {
+  border-color: red;
+}
