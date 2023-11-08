@@ -19,8 +19,6 @@ const Input = forwardRef<HTMLInputElement, Props>(
 			}
 		};
 
-		// console.log(value);
-
 		return (
 			<div
 				className={["input-container", ...(error ? ["error"] : [])].join(" ")}

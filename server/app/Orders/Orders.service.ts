@@ -27,34 +27,37 @@ export class OrdersService {
     return input;
   }
 
-  async getOrders(sorter: string) {
-      const orders = await this.repository.getOrdersOperation(sorter);
-      return SuccessResponse(orders);
+  async getOrders(query: {sortBy: string, limit: string, offset: string}) {
+    const sortBy = query.sortBy;
+    const limit = query.limit;
+    const offset = query.offset;
+    const orders = await this.repository.getOrdersOperation(sortBy, limit, offset);
+    return SuccessResponse(orders);
   }
 
   async getOrderById(id: number) {
-      const orders = await this.repository.getOrderByIdOperation(id);
-      return SuccessResponse(orders);
+    const orders = await this.repository.getOrderByIdOperation(id);
+    return SuccessResponse(orders);
   }
 
   async getOrdersStats(sorter: string) {
-      const orders = await this.repository.getStats(sorter);
-      return SuccessResponse(orders);
+    const orders = await this.repository.getStats(sorter);
+    return SuccessResponse(orders);
   }
 
   async createOrder(dto: OrderCreateInput) {
-      const input = await this._handleValidate(OrderCreateInput, dto);
+    const input = await this._handleValidate(OrderCreateInput, dto);
 
-      const order = await this.repository.createOrderOperation(input);
+    const order = await this.repository.createOrderOperation(input);
 
-      return SuccessResponse(order);
+    return SuccessResponse(order);
   }
 
   async updateOrder(dto: OrderUpdateInput) {
-      const input = await this._handleValidate(OrderUpdateInput, dto);
-  
-      const order = await this.repository.updateOrderOperation(input);
+    const input = await this._handleValidate(OrderUpdateInput, dto);
 
-      return SuccessResponse(order);
+    const order = await this.repository.updateOrderOperation(input);
+
+    return SuccessResponse(order);
   }
 }

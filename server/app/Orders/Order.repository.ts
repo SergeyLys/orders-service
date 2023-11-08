@@ -28,16 +28,26 @@ export class OrderRepository extends BasePGRepository {
     }
   }
 
-  async getOrdersOperation(sorter: string = '') {
+  async getOrdersOperation(sorter?: string, limit?: string, offset?: string): Promise<any> {
     const query = `
       SELECT id, name, phone, address, status, created_at
       FROM orders
-      ${sorter ? `ORDER BY ${sorter} DESC` : ''};
+      ${sorter ? `ORDER BY ${sorter} DESC` : ''}
+      ${limit ? `LIMIT ${limit}` : ''}
+      ${offset ? `OFFSET ${offset}` : ''};
     `;
 
-    const result = await this.runQuery(query);
+    const totalQuery = `
+      SELECT COUNT(id) AS total
+      FROM orders;
+    `;
 
-    return result.rows;
+    const [{rows}, {rows: count}] = await Promise.all([
+      this.runQuery(query), 
+      this.runQuery(totalQuery)
+    ]);
+
+    return {total: count[0].total, rows};
   }
 
   async getOrderByIdOperation(id: number) {
@@ -59,19 +69,19 @@ export class OrderRepository extends BasePGRepository {
         CONCAT(
           SUM(CASE WHEN status = 'approved' THEN 1 ELSE 0 END),
           ' (',
-          ROUND((SUM(CASE WHEN status = 'approved' THEN 1 ELSE 0 END) * 100.0 / COUNT(*)), 2),
+          ROUND((SUM(CASE WHEN status = 'approved' THEN 1 ELSE 0 END) * 100.0 / COUNT(id)), 2),
           '%)'
         ) AS "approved",
         CONCAT(
           SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END),
           ' (',
-          ROUND((SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) * 100.0 / COUNT(*)), 2),
+          ROUND((SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) * 100.0 / COUNT(id)), 2),
           '%)'
         ) AS "pending",
         CONCAT(
           SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END),
           ' (',
-          ROUND((SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) * 100.0 / COUNT(*)), 2),
+          ROUND((SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) * 100.0 / COUNT(id)), 2),
           '%)'
         ) AS "cancelled"
       FROM orders

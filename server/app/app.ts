@@ -15,7 +15,7 @@ export async function startServer() {
 
   app.get("/api/orders", async (req: Request, res: Response) => {
     try {
-      const orders = await ordersService.getOrders(req.query.sortBy as string);
+      const orders = await ordersService.getOrders(req.query as {sortBy: string, limit: string, offset: string});
       res.json(orders);
     } catch(error) {
       res.status(error.statusCode).send(error.body);

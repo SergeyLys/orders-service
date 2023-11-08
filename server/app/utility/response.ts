@@ -39,8 +39,6 @@ export const FailureResponse = (code: number, error: unknown) => {
 
   if (error instanceof Error) {
 
-    console.log(code);
-
     if (typeof error.message === 'string') {
       return formatResponse(code, error.message, error);
     }

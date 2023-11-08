@@ -1,0 +1,23 @@
+.pagination-container {
+  background-color: white;
+  padding: 10px 15px;
+}
+
+.arrow {
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+
+.arrow svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.current {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0 5px;
+  width: 100px;
+  text-align: center;
+}

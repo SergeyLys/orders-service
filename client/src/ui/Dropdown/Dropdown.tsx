@@ -90,7 +90,7 @@ const Dropdown: React.FC<Props<unknown>> = <T,>({
 type TMemoizedDropdown<T> = React.NamedExoticComponent<Props<T>> &
 	DropdownComposition;
 
-const MemoizedDropdown = memo(Dropdown) as TMemoizedDropdown<unknown>;
+const MemoizedDropdown = memo(Dropdown) as TMemoizedDropdown<any>;
 
 MemoizedDropdown.Option = Option;
 

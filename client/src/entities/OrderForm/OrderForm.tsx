@@ -59,7 +59,7 @@ const OrderForm: React.FC<Props> = ({
 			status,
 		};
 
-		if (shouldValidate && validationErrors) {
+		if (shouldValidate) {
 			const invalidFields = Object.entries(data).reduce((acc, [key, value]) => {
 				const errorMsg =
 					(validationRules[key] && validationRules[key](value as string)) || "";
@@ -95,7 +95,7 @@ const OrderForm: React.FC<Props> = ({
 					setValidationErrors(error.data.data);
 				}
 			});
-	}, [status, shouldValidate, validationErrors, onSubmit, navigate]);
+	}, [status, shouldValidate, onSubmit, navigate]);
 
 	const handleInputChange = useCallback(
 		(value: string, field: string, validate: (val: string) => string) => {

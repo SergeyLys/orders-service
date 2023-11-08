@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
-import { ListView, ColumnType } from "../ui";
+import { useCallback, useState } from "react";
+import { ListView, ColumnType, Pagination } from "../ui";
 import { useGetOrdersQuery } from "../utils/api";
 import { IOrder } from "../../../shared";
-import { useState } from "react";
+import debounce from "../utils/debounce";
 
 const columns: ColumnType[] = [
 	{
@@ -36,24 +37,74 @@ const columns: ColumnType[] = [
 		key: "4",
 	},
 ];
+const pageSizeOptions = [
+	{ id: 10, value: "10" },
+	{ id: 20, value: "20" },
+	{ id: 100, value: "100" },
+];
+
+const DEFAULT_PAGE_SIZE = 10;
+const DEFAULT_CURRENT_PAGE = 1;
 
 const Orders: React.FC = () => {
+	const [pagination, setPagination] = useState({
+		offset: 0,
+		currentPage: DEFAULT_CURRENT_PAGE,
+		pageSize: DEFAULT_PAGE_SIZE,
+	});
 	const [sorter, setSorter] = useState("");
-	const { data = [], isError, isLoading } = useGetOrdersQuery(sorter);
+	const {
+		data = { rows: [], total: 0 },
+		isError,
+		isLoading,
+	} = useGetOrdersQuery({
+		sorter,
+		limit: pagination.pageSize.toString(),
+		offset: pagination.offset.toString(),
+	});
+
+	const handleChangePage = useCallback(
+		debounce((page: number, pageSize: number) => {
+			setPagination(() => ({
+				offset: (page - 1) * pageSize,
+				currentPage: page,
+				pageSize,
+			}));
+		}, 500),
+		[]
+	);
 
 	return (
 		<>
-			<div className="m-8 flex space-between">
-				<Link className="button" to="/edit">
-					Create new order
-				</Link>
-				<Link className="button" to="/stats">
-					Statistics
-				</Link>
+			<div className="m-8 flex space-between wrap">
+				<div className="flex align-center">
+					<Link className="button m-8" to="/edit">
+						Create new order
+					</Link>
+
+					<Link className="button" to="/stats">
+						Statistics
+					</Link>
+				</div>
+
+				<Pagination
+					total={data.total}
+					defaultPageSize={DEFAULT_PAGE_SIZE}
+					current={pagination.currentPage}
+					onChange={handleChangePage}
+				>
+					<Pagination.PageSizeSelector
+						styles={{ marginRight: 15, minWidth: 60 }}
+						pageSizeOptions={pageSizeOptions}
+					/>
+					<Pagination.Arrow direction="left" />
+					<Pagination.Current />
+					<Pagination.Arrow direction="right" />
+				</Pagination>
 			</div>
 			<ListView
 				columns={columns}
-				data={data}
+				data={data.rows}
 				error={isError ? "Some error occured" : null}
 				isLoading={isLoading}
 				fallbackText="No orders yet"

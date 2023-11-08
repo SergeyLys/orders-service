@@ -10,6 +10,9 @@
   padding: 10px 18px;
   font-weight: bold;
   font-size: 18px;
+  position: sticky;
+  top: 0;
+  left: 0;
 
   grid-template-columns: subgrid;
   display: grid;
